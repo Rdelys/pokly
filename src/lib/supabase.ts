@@ -4,8 +4,8 @@ import { createClient } from '@supabase/supabase-js';
 
 // ⚠️ Remplace ces valeurs par celles de ton projet Supabase
 // (Dashboard Supabase → Project Settings → API)
-const SUPABASE_URL = 'https://faux-projet.supabase.co';
-const SUPABASE_ANON_KEY = 'fausse-cle-anon-a-remplacer';
+const SUPABASE_URL = 'https://sbrkmwsziazxmdqqpdfc.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_9RtUr0q8hz96OayZQ-wn9Q_j-m8KEOO';
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {
