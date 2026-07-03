@@ -43,8 +43,7 @@ export default function SplashScreen({ navigation }: Props) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.center}>
-        <Logo size={140} />
-        <Text style={styles.title}>{t('appName')}</Text>
+        <Logo size={150} />
       </View>
 
       <View style={styles.bottom}>

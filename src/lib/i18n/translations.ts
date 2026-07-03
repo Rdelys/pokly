@@ -93,7 +93,7 @@ type TranslationKeys = {
 
 export const translations: Record<LanguageCode, TranslationKeys> = {
   fr: {
-    appName: 'POKETO',
+    appName: 'Poketo',
 
     loginTitle: 'Connexion',
     loginSubtitle: 'Content de te revoir',
@@ -107,7 +107,7 @@ export const translations: Record<LanguageCode, TranslationKeys> = {
     signupTitle: 'Créer un compte',
     signupSubtitle: 'Rejoins-nous en quelques secondes',
     usernameLabel: "Nom d'utilisateur",
-    usernamePlaceholder: 'ex : poketo_user',
+    usernamePlaceholder: 'ex : Poketo_user',
     signupButton: "S'inscrire",
     haveAccount: 'Déjà un compte ?',
     backToLogin: 'Se connecter',
@@ -172,7 +172,7 @@ export const translations: Record<LanguageCode, TranslationKeys> = {
   },
 
   en: {
-    appName: 'POKETO',
+    appName: 'Poketo',
 
     loginTitle: 'Log in',
     loginSubtitle: 'Welcome back',
@@ -186,7 +186,7 @@ export const translations: Record<LanguageCode, TranslationKeys> = {
     signupTitle: 'Create an account',
     signupSubtitle: 'Join in a few seconds',
     usernameLabel: 'Username',
-    usernamePlaceholder: 'e.g. poketo_user',
+    usernamePlaceholder: 'e.g. Poketo_user',
     signupButton: 'Sign up',
     haveAccount: 'Already have an account?',
     backToLogin: 'Log in',
@@ -251,7 +251,7 @@ export const translations: Record<LanguageCode, TranslationKeys> = {
   },
 
   mg: {
-    appName: 'POKETO',
+    appName: 'Poketo',
 
     loginTitle: 'Hiditra',
     loginSubtitle: 'Tonga soa indray',
@@ -265,7 +265,7 @@ export const translations: Record<LanguageCode, TranslationKeys> = {
     signupTitle: 'Mamorona kaonty',
     signupSubtitle: 'Midira ao anatin\'ny segondra vitsivitsy',
     usernameLabel: "Anaram-pikasa",
-    usernamePlaceholder: 'ohatra: poketo_user',
+    usernamePlaceholder: 'ohatra: Poketo_user',
     signupButton: 'Misoratra anarana',
     haveAccount: 'Efa manana kaonty?',
     backToLogin: 'Hiditra',

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "pokly-app",
-    "slug": "pokly-app",
+    "name": "Poketo",
+    "slug": "poketo",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
