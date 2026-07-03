@@ -9,6 +9,7 @@ import {
   Text,
   TextInput,
   View,
+  Dimensions,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -26,6 +27,8 @@ import {
   computeBalances,
   fetchTransactions,
 } from '../lib/transactions';
+
+const { height } = Dimensions.get('window');
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
@@ -77,7 +80,7 @@ export default function HomeScreen({ navigation }: Props) {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Top Navigation Bar */}
+      {/* Top Navigation Bar - Fixed */}
       <View style={styles.topBar}>
         <Pressable
           onPress={() => navigation.navigate('Settings')}
@@ -90,7 +93,7 @@ export default function HomeScreen({ navigation }: Props) {
         <View style={styles.iconButton} />
       </View>
 
-      {/* Search Bar */}
+      {/* Search Bar - Fixed */}
       <View style={styles.searchWrapper}>
         <View style={styles.searchBar}>
           <Ionicons name="search" size={18} color={colors.textSecondary} />
@@ -109,15 +112,8 @@ export default function HomeScreen({ navigation }: Props) {
         </View>
       </View>
 
-      <ScrollView
-        style={styles.scrollFlex}
-        contentContainerStyle={styles.scroll}
-        showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled"
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      >
+      {/* Fixed Content (Balance & Summary Cards) */}
+      <View style={styles.fixedContent}>
         {/* Balance Card */}
         <LinearGradient
           colors={[colors.primary, colors.primaryDark]}
@@ -153,7 +149,18 @@ export default function HomeScreen({ navigation }: Props) {
         <Text style={styles.sectionTitle}>
           {search ? `${t('results')} (${filtered.length})` : t('recentOps')}
         </Text>
+      </View>
 
+      {/* Scrollable Transactions List */}
+      <ScrollView
+        style={styles.scrollFlex}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         {loading ? (
           <ActivityIndicator color={colors.primary} style={{ marginTop: spacing.lg }} />
         ) : errorMsg ? (
@@ -221,11 +228,12 @@ export default function HomeScreen({ navigation }: Props) {
             })}
           </View>
         )}
-
+        
+        {/* Bottom spacing for FAB */}
         <View style={{ height: 110 }} />
       </ScrollView>
 
-      {/* Floating Action Button */}
+      {/* Floating Action Button - Fixed */}
       <Pressable
         style={({ pressed }) => [styles.fab, pressed && styles.fabPressed]}
         onPress={() => navigation.navigate('AddTransaction')}
@@ -249,6 +257,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg,
     paddingTop: spacing.sm,
     paddingBottom: spacing.sm,
+    backgroundColor: colors.background,
   },
   iconButton: {
     width: 32,
@@ -265,6 +274,7 @@ const styles = StyleSheet.create({
   searchWrapper: {
     paddingHorizontal: spacing.lg,
     paddingBottom: spacing.md,
+    backgroundColor: colors.background,
   },
   searchBar: {
     flexDirection: 'row',
@@ -282,11 +292,10 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: colors.text,
   },
-  scrollFlex: {
-    flex: 1,
-  },
-  scroll: {
+  fixedContent: {
     paddingHorizontal: spacing.lg,
+    paddingBottom: spacing.sm,
+    backgroundColor: colors.background,
   },
   balanceCard: {
     borderRadius: radius.lg,
@@ -344,6 +353,13 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: colors.text,
     marginBottom: spacing.sm,
+  },
+  scrollFlex: {
+    flex: 1,
+  },
+  scrollContent: {
+    paddingHorizontal: spacing.lg,
+    paddingBottom: spacing.xs,
   },
   empty: {
     ...typography.body,
