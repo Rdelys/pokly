@@ -7,7 +7,8 @@ import { colors, radius, spacing } from '../theme/colors';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '../navigation/types';
 import { supabase } from '../lib/supabase';
-import { handleRecoveryUrl, isResetPasswordUrl } from '../lib/authDeepLink';
+import { claimRecoveryUrl, isResetPasswordUrl } from '../lib/authDeepLink';
+import { addLog } from '../lib/debugLog';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Splash'>;
 
@@ -50,15 +51,28 @@ export default function SplashScreen({ navigation }: Props) {
     let isMounted = true;
 
     const init = async () => {
+      addLog('Splash: en attente de l\'URL de lancement...');
       const initialUrl = await waitForLaunchUrl(DEEP_LINK_GRACE_MS);
+      addLog(`Splash: URL de lancement = ${initialUrl ?? '(aucune)'}`);
 
       if (initialUrl && isResetPasswordUrl(initialUrl)) {
-        // Traité ICI, une seule fois. On navigue directement avec le
-        // résultat déjà connu : ResetPasswordScreen ne retraitera jamais
-        // cette URL.
-        const status = await handleRecoveryUrl(initialUrl);
-        if (isMounted) {
-          navigation.replace('ResetPassword', { prehandled: true, status });
+        addLog('Splash: URL identifiée comme reset-password');
+        // claimRecoveryUrl() renvoie null si RootNavigator (son propre
+        // listener 'url', toujours actif) a déjà pris en charge cette même
+        // URL en parallèle. Dans ce cas on NE FAIT RIEN ici : retraiter
+        // l'URL provoquerait une double consommation du code PKCE (à usage
+        // unique) et ferait échouer l'un des deux appels avec un faux "lien
+        // expiré". C'est alors RootNavigator qui se chargera de naviguer
+        // vers ResetPassword une fois l'échange terminé.
+        const claim = claimRecoveryUrl(initialUrl);
+        if (claim) {
+          const status = await claim;
+          addLog(`Splash: statut final = ${status} → navigation vers ResetPassword`);
+          if (isMounted) {
+            navigation.replace('ResetPassword', { prehandled: true, status });
+          }
+        } else {
+          addLog('Splash: URL déjà réclamée ailleurs, Splash ne navigue pas');
         }
         return;
       }
@@ -71,6 +85,7 @@ export default function SplashScreen({ navigation }: Props) {
 
       const { data } = await supabase.auth.getSession();
       const destination: 'Login' | 'Home' = data.session ? 'Home' : 'Login';
+      addLog(`Splash: pas de deep link reset → destination = ${destination}`);
 
       Animated.timing(progress, {
         toValue: 1,

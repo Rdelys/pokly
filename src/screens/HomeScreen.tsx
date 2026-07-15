@@ -108,6 +108,9 @@ export default function HomeScreen({ navigation }: Props) {
     );
   }, [transactions, search]);
 
+  // Couleur du montant : rouge si négatif, vert si positif ou nul
+  const balanceColor = balanceGlobale >= 0 ? colors.success : colors.error;
+
   return (
     <SafeAreaView style={styles.container}>
       {/* Top Navigation Bar - Fixed */}
@@ -146,18 +149,13 @@ export default function HomeScreen({ navigation }: Props) {
 
       {/* Fixed Content (Balance & Summary Cards) */}
       <View style={styles.fixedContent}>
-        {/* Balance Card */}
-        <LinearGradient
-          colors={[colors.primary, colors.primaryDark]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.balanceCard}
-        >
+        {/* Balance Card - fond neutre, plus de gradient bleu */}
+        <View style={styles.balanceCard}>
           <Text style={styles.balanceLabel}>{t('balanceGlobal').toUpperCase()}</Text>
-          <Text style={styles.balanceValue}>
+          <Text style={[styles.balanceValue, { color: balanceColor }]}>
             {formatAmount(balanceGlobale, currency)}
           </Text>
-        </LinearGradient>
+        </View>
 
         {/* Summary Cards - cliquables vers l'historique */}
         <View style={styles.row}>
@@ -367,12 +365,14 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.xl,
     alignItems: 'center',
     marginBottom: spacing.md,
-    ...shadow.fab,
+    backgroundColor: colors.white,
+    borderWidth: 1,
+    borderColor: colors.border,
+    ...shadow.soft,
   },
   balanceLabel: {
     ...typography.small,
-    color: colors.white,
-    opacity: 0.85,
+    color: colors.textSecondary,
     letterSpacing: 1.5,
     fontWeight: '700',
     marginBottom: spacing.xs,
@@ -381,7 +381,6 @@ const styles = StyleSheet.create({
     fontSize: 36,
     fontWeight: '800',
     letterSpacing: -0.5,
-    color: colors.white,
   },
   row: {
     flexDirection: 'row',

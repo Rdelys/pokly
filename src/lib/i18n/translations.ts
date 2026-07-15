@@ -145,6 +145,13 @@ type TranslationKeys = {
   errorPhotoPermission: string;
   errorCameraPermission: string;
   errorUserNotFound: string;
+  errorAcceptTerms:string;
+  acceptTermsPrefix:string;
+  privacyPolicyLink:string;
+  andConnector:string;
+  termsOfUseLink:string;
+  otpCodeLabel: string,
+otpCodePlaceholder: string,
 };
 
 export const translations: Record<LanguageCode, TranslationKeys> = {
@@ -152,6 +159,9 @@ export const translations: Record<LanguageCode, TranslationKeys> = {
     appName: 'Poketo',
     resetPasswordVerifying: 'Vérification du lien en cours...',
     resetLinkInvalid: 'Ce lien de réinitialisation est invalide ou a expiré. Demande un nouveau lien.',
+
+    otpCodeLabel: 'Code reçu par email',
+otpCodePlaceholder: '123456',
 
     profileTitle: 'Mon profil',
     personalInfo: 'Informations personnelles',
@@ -167,6 +177,12 @@ export const translations: Record<LanguageCode, TranslationKeys> = {
     infoUpdated: 'Informations mises à jour !',
     errorPasswordMismatch: 'Les mots de passe ne correspondent pas.',
     profileMenuItem: 'Profil',
+
+    errorAcceptTerms: "Merci d'accepter la politique de confidentialité et les conditions d'utilisation.",
+acceptTermsPrefix: "J'accepte la",
+privacyPolicyLink: "politique de confidentialité",
+andConnector: "et les",
+termsOfUseLink: "conditions d'utilisation",
 
     historyTitle: 'Historique',
     historyLoans: 'Prêts',
@@ -281,7 +297,8 @@ export const translations: Record<LanguageCode, TranslationKeys> = {
     appName: 'Poketo',
     resetPasswordVerifying: 'Verifying link...',
     resetLinkInvalid: 'This reset link is invalid or has expired. Request a new one.',
-
+otpCodeLabel: 'Code received by email',
+otpCodePlaceholder: '123456',
     profileTitle: 'My profile',
     personalInfo: 'Personal information',
     usernameFieldLabel: 'Username',
@@ -300,6 +317,12 @@ export const translations: Record<LanguageCode, TranslationKeys> = {
     historyTitle: 'History',
     historyLoans: 'Loans',
     historyDebts: 'Debts',
+
+    errorAcceptTerms: "Please accept the privacy policy and terms of use.",
+acceptTermsPrefix: "I accept the",
+privacyPolicyLink: "privacy policy",
+andConnector: "and the",
+termsOfUseLink: "terms of use",
 
     statusLabel: 'Status',
     statusEnCours: 'In progress',
@@ -410,7 +433,8 @@ export const translations: Record<LanguageCode, TranslationKeys> = {
     appName: 'Poketo',
     resetPasswordVerifying: 'Manamarina ny rohy...',
     resetLinkInvalid: 'Diso na lany daty ity rohy fanavaozana ity. Mangataha rohy vaovao.',
-
+otpCodeLabel: 'Kaody noraisina amin\'ny mailaka',
+otpCodePlaceholder: '123456',
     profileTitle: 'Ny mombamomba ahy',
     personalInfo: 'Mombamomba manokana',
     usernameFieldLabel: 'Anaram-pikasa',
@@ -425,6 +449,12 @@ export const translations: Record<LanguageCode, TranslationKeys> = {
     infoUpdated: 'Voaova ny mombamomba!',
     errorPasswordMismatch: 'Tsy mitovy ny tenimiafina.',
     profileMenuItem: 'Momba ahy',
+
+    errorAcceptTerms: "Ekeo azafady ny politika momba ny fiarovana ny tsiambaratelo sy ny fepetra fampiasana.",
+acceptTermsPrefix: "Ekeko ny",
+privacyPolicyLink: "politika momba ny fiarovana ny tsiambaratelo",
+andConnector: "sy ny",
+termsOfUseLink: "fepetra fampiasana",
 
     historyTitle: 'Tantara',
     historyLoans: 'Trosa nomena',
@@ -539,7 +569,8 @@ export const translations: Record<LanguageCode, TranslationKeys> = {
     appName: 'Poketo',
     resetPasswordVerifying: 'Verificando el enlace...',
     resetLinkInvalid: 'Este enlace de restablecimiento no es válido o ha expirado. Solicita uno nuevo.',
-
+otpCodeLabel: 'Código recibido por email',
+otpCodePlaceholder: '123456',
     profileTitle: 'Mi perfil',
     personalInfo: 'Información personal',
     usernameFieldLabel: 'Nombre de usuario',
@@ -554,6 +585,13 @@ export const translations: Record<LanguageCode, TranslationKeys> = {
     infoUpdated: '¡Información actualizada!',
     errorPasswordMismatch: 'Las contraseñas no coinciden.',
     profileMenuItem: 'Perfil',
+
+    errorAcceptTerms: "Por favor, acepta la política de privacidad y las condiciones de uso.",
+acceptTermsPrefix: "Acepto la",
+privacyPolicyLink: "política de privacidad",
+andConnector: "y las",
+termsOfUseLink: "condiciones de uso",
+
 
     historyTitle: 'Historial',
     historyLoans: 'Préstamos',
@@ -668,7 +706,8 @@ export const translations: Record<LanguageCode, TranslationKeys> = {
     appName: 'Poketo',
     resetPasswordVerifying: 'Link wird überprüft...',
     resetLinkInvalid: 'Dieser Link zum Zurücksetzen ist ungültig oder abgelaufen. Fordere einen neuen an.',
-
+otpCodeLabel: 'Per E-Mail erhaltener Code',
+otpCodePlaceholder: '123456',
     profileTitle: 'Mein Profil',
     personalInfo: 'Persönliche Informationen',
     usernameFieldLabel: 'Benutzername',
@@ -683,6 +722,12 @@ export const translations: Record<LanguageCode, TranslationKeys> = {
     infoUpdated: 'Informationen aktualisiert!',
     errorPasswordMismatch: 'Die Passwörter stimmen nicht überein.',
     profileMenuItem: 'Profil',
+
+    errorAcceptTerms: "Bitte akzeptiere die Datenschutzrichtlinie und die Nutzungsbedingungen.",
+acceptTermsPrefix: "Ich akzeptiere die",
+privacyPolicyLink: "Datenschutzrichtlinie",
+andConnector: "und die",
+termsOfUseLink: "Nutzungsbedingungen",
 
     historyTitle: 'Verlauf',
     historyLoans: 'Verliehen',
