@@ -17,7 +17,6 @@ import PrimaryButton from '../components/PrimaryButton';
 import { supabase } from '../lib/supabase';
 import { colors, spacing, typography } from '../theme/colors';
 import { useLanguage } from '../lib/i18n/LanguageContext';
-import { addLog } from '../lib/debugLog';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ForgotPassword'>;
 
@@ -30,33 +29,36 @@ export default function ForgotPasswordScreen({ navigation }: Props) {
   const [otpCode, setOtpCode] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+
+  // Un seul verrou pour les DEUX boutons de l'étape "code" (valider le
+  // reset / renvoyer un code). Sans ça, les deux boutons partagent le même
+  // état visuel de chargement mais restent cliquables indépendamment : on
+  // pouvait déclencher un renvoi de code pendant que la vérification du
+  // précédent était encore en cours, provoquant deux appels Supabase en
+  // parallèle sur le même compte.
+  const [pendingAction, setPendingAction] = useState<'send' | 'verify' | null>(null);
+  const isBusy = pendingAction !== null;
 
   const handleSendCode = async () => {
+    if (isBusy) return;
     setError('');
     if (!email.trim()) {
       setError(t('errorFillFields'));
       return;
     }
-    setLoading(true);
-    addLog(`ForgotPassword: demande de code OTP pour ${email.trim()}`);
-    // Pas de redirectTo ici : on n'utilise plus de lien cliquable, seulement
-    // le code à 6 chiffres envoyé dans le corps du mail ({{ .Token }} côté
-    // template Supabase). Ça évite les faux "lien expiré" causés par le
-    // pré-scan automatique des liens par Gmail/Outlook.
+    setPendingAction('send');
     const { error: resetError } = await supabase.auth.resetPasswordForEmail(email.trim());
-    setLoading(false);
+    setPendingAction(null);
 
     if (resetError) {
-      addLog(`ForgotPassword: resetPasswordForEmail ÉCHEC: ${resetError.message}`);
       setError(resetError.message);
       return;
     }
-    addLog('ForgotPassword: code OTP envoyé');
     setStep('code');
   };
 
   const handleVerifyAndReset = async () => {
+    if (isBusy) return;
     setError('');
 
     if (!otpCode.trim()) {
@@ -68,8 +70,7 @@ export default function ForgotPasswordScreen({ navigation }: Props) {
       return;
     }
 
-    setLoading(true);
-    addLog(`ForgotPassword: vérification du code OTP...`);
+    setPendingAction('verify');
     const { error: otpError } = await supabase.auth.verifyOtp({
       email: email.trim(),
       token: otpCode.trim(),
@@ -77,23 +78,19 @@ export default function ForgotPasswordScreen({ navigation }: Props) {
     });
 
     if (otpError) {
-      addLog(`ForgotPassword: verifyOtp ÉCHEC: ${otpError.message}`);
-      setLoading(false);
+      setPendingAction(null);
       setError(otpError.message);
       return;
     }
-    addLog('ForgotPassword: verifyOtp OK, mise à jour du mot de passe...');
 
     const { error: updateError } = await supabase.auth.updateUser({ password: newPassword });
-    setLoading(false);
+    setPendingAction(null);
 
     if (updateError) {
-      addLog(`ForgotPassword: updateUser ÉCHEC: ${updateError.message}`);
       setError(updateError.message);
       return;
     }
 
-    addLog('ForgotPassword: mot de passe mis à jour avec succès');
     setStep('success');
   };
 
@@ -138,7 +135,7 @@ export default function ForgotPasswordScreen({ navigation }: Props) {
               <PrimaryButton
                 title={t('sendResetLink')}
                 onPress={handleSendCode}
-                loading={loading}
+                loading={pendingAction === 'send'}
                 style={{ marginTop: spacing.sm }}
               />
             </View>
@@ -152,24 +149,28 @@ export default function ForgotPasswordScreen({ navigation }: Props) {
                 maxLength={12}
                 value={otpCode}
                 onChangeText={setOtpCode}
+                editable={!isBusy}
               />
               <PasswordField
                 label={t('newPasswordLabel')}
                 placeholder={t('passwordPlaceholder')}
                 value={newPassword}
                 onChangeText={setNewPassword}
+                editable={!isBusy}
               />
               {!!error && <Text style={styles.error}>{error}</Text>}
               <PrimaryButton
                 title={t('resetPasswordButton')}
                 onPress={handleVerifyAndReset}
-                loading={loading}
+                loading={pendingAction === 'verify'}
+                disabled={isBusy}
                 style={{ marginTop: spacing.sm }}
               />
               <PrimaryButton
                 title={t('sendResetLink')}
                 onPress={handleSendCode}
-                loading={loading}
+                loading={pendingAction === 'send'}
+                disabled={isBusy}
                 variant="outline"
                 style={{ marginTop: spacing.sm }}
               />
@@ -181,6 +182,7 @@ export default function ForgotPasswordScreen({ navigation }: Props) {
               title={t('backToLogin')}
               onPress={() => navigation.goBack()}
               variant="outline"
+              disabled={isBusy}
               style={{ marginTop: spacing.lg }}
             />
           )}
